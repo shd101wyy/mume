@@ -1618,6 +1618,7 @@ sidebarTOCBtn.addEventListener('click', function(event) {
   public async htmlExport({
     offline = false,
     runAllCodeChunks = false,
+    dest = null,
   }): Promise<string> {
     const inputString = await utility.readFile(this.filePath, {
       encoding: "utf-8",
@@ -1641,9 +1642,8 @@ sidebarTOCBtn.addEventListener('click', function(event) {
       embedSVG = htmlConfig["embed_svg"];
     }
 
-    let dest = this.filePath;
-    const extname = path.extname(dest);
-    dest = dest.replace(new RegExp(extname + "$"), ".html");
+    const extname = path.extname(this.filePath);
+    dest = dest || this.filePath.replace(new RegExp(extname + "$"), ".html");
 
     html = await this.generateHTMLTemplateForExport(html, yamlConfig, {
       isForPrint: false,
@@ -1688,6 +1688,7 @@ sidebarTOCBtn.addEventListener('click', function(event) {
     fileType = "pdf",
     runAllCodeChunks = false,
     openFileAfterGeneration = false,
+    dest = null,
   }): Promise<string> {
     const inputString = await utility.readFile(this.filePath, {
       encoding: "utf-8",
@@ -1700,9 +1701,9 @@ sidebarTOCBtn.addEventListener('click', function(event) {
       isForPreview: false,
       runAllCodeChunks,
     }));
-    let dest = this.filePath;
-    const extname = path.extname(dest);
-    dest = dest.replace(new RegExp(extname + "$"), "." + fileType);
+    const extname = path.extname(this.filePath);
+    dest =
+      dest || this.filePath.replace(new RegExp(extname + "$"), "." + fileType);
 
     html = await this.generateHTMLTemplateForExport(html, yamlConfig, {
       isForPrint: true,
@@ -1780,6 +1781,7 @@ sidebarTOCBtn.addEventListener('click', function(event) {
     fileType = "pdf",
     runAllCodeChunks = false,
     openFileAfterGeneration = false,
+    dest = null,
   }): Promise<string> {
     const inputString = await utility.readFile(this.filePath, {
       encoding: "utf-8",
@@ -1792,9 +1794,9 @@ sidebarTOCBtn.addEventListener('click', function(event) {
       isForPreview: false,
       runAllCodeChunks,
     }));
-    let dest = this.filePath;
-    const extname = path.extname(dest);
-    dest = dest.replace(new RegExp(extname + "$"), "." + fileType);
+    const extname = path.extname(this.filePath);
+    dest =
+      dest || this.filePath.replace(new RegExp(extname + "$"), "." + fileType);
 
     html = await this.generateHTMLTemplateForExport(html, yamlConfig, {
       isForPrint: true,
@@ -1857,6 +1859,7 @@ sidebarTOCBtn.addEventListener('click', function(event) {
   public async princeExport({
     runAllCodeChunks = false,
     openFileAfterGeneration = false,
+    dest = null,
   }): Promise<string> {
     const inputString = await utility.readFile(this.filePath, {
       encoding: "utf-8",
@@ -1869,9 +1872,8 @@ sidebarTOCBtn.addEventListener('click', function(event) {
       isForPreview: false,
       runAllCodeChunks,
     }));
-    let dest = this.filePath;
-    const extname = path.extname(dest);
-    dest = dest.replace(new RegExp(extname + "$"), ".pdf");
+    const extname = path.extname(this.filePath);
+    dest = dest || this.filePath.replace(new RegExp(extname + "$"), ".pdf");
 
     html = await this.generateHTMLTemplateForExport(html, yamlConfig, {
       isForPrint: true,
@@ -1940,12 +1942,14 @@ sidebarTOCBtn.addEventListener('click', function(event) {
   public async eBookExport({
     fileType = "epub",
     runAllCodeChunks = false,
+    dest = null,
   }: {
     /**
      * fileType: 'epub', 'pdf', 'mobi' or 'html'
      */
     fileType: string;
     runAllCodeChunks?: boolean;
+    dest?: string;
   }): Promise<string> {
     const inputString = await utility.readFile(this.filePath, {
       encoding: "utf-8",
@@ -1961,12 +1965,13 @@ sidebarTOCBtn.addEventListener('click', function(event) {
       emojiToSvg,
     }));
 
-    let dest = this.filePath;
-    const extname = path.extname(dest);
-    dest = dest.replace(
-      new RegExp(extname + "$"),
-      "." + fileType.toLowerCase(),
-    );
+    const extname = path.extname(this.filePath);
+    dest =
+      dest ||
+      this.filePath.replace(
+        new RegExp(extname + "$"),
+        "." + fileType.toLowerCase(),
+      );
 
     const ebookConfig = yamlConfig["ebook"];
     if (!ebookConfig) {
