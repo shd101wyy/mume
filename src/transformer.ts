@@ -62,6 +62,7 @@ export interface TransformMarkdownOptions {
   imageDirectoryPath?: string;
   usePandocParser: boolean;
   headingIdGenerator?: HeadingIdGenerator;
+  headingsLevel?: number;
 }
 
 const fileExtensionToLanguageMap = {
@@ -253,6 +254,7 @@ export async function transformMarkdown(
     imageDirectoryPath = "",
     usePandocParser = false,
     headingIdGenerator = new HeadingIdGenerator(),
+    headingsLevel = 0,
   }: TransformMarkdownOptions,
 ): Promise<TransformMarkdownOutput> {
   let lastOpeningCodeBlockFence: string = null;
@@ -362,7 +364,9 @@ export async function transformMarkdown(
         // if (headingMatch) {
         heading = line.replace(headingMatch[1], "");
         tag = headingMatch[1];
-        level = tag.length;
+        level = tag.length + headingsLevel;
+        level = level < 6 ? level : 6;
+        tag = "#".repeat(level);
         /*} else {
             if (inputString[end + 1] === '=') {
               heading = line.trim()
@@ -807,6 +811,7 @@ export async function transformMarkdown(
                 imageDirectoryPath,
                 usePandocParser,
                 headingIdGenerator,
+                headingsLevel: headingsLevel + 1,
               }));
               output2 = "\n" + output2 + "  ";
               headings = headings.concat(headings2);
