@@ -1037,6 +1037,7 @@
           }
 
           window["MathJax"].Hub.Queue(
+            ["resetEquationNumbers", MathJax.InputJax.TeX],
             ["Typeset", MathJax.Hub, this.hiddenPreviewElement],
             [
               () => {
